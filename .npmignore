@@ -1,0 +1,6 @@
+dev/
+.vscode/
+jsconfig.json
+test.js 
+core/**/*.js.map
+*.js.map
