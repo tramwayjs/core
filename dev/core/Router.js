@@ -77,7 +77,7 @@ export default class Router {
      * @param {Route} route
      * @returns {string}
      * 
-     * @memberOf RoutePreparationTemplate
+     * @memberOf Router
      */
     preparePath(route) {
         let path = route.getPath();
