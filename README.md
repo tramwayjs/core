@@ -190,10 +190,11 @@ app.listen(PORT);
 ```
 
 The router also exposes some static methods which can be used across your app without making another instance.
+
 | Function | Usage | Notes |
 | --- | --- | --- |
 | ```buildPath(...string): string``` | ```"a/b/c" === Router.buildPath("a", "b", "c")``` | Returns a clean path given any number of strings. |
-| ```buildQuery(params: Object): string``` | ```"a=1&b=2&c=true" === Router.buildQuery({"a": 1, "b": 2, "c": true})``` | Returns a query string for any associative object
+| ```buildQuery(params: Object): string``` | ```"a=1&b=2&c=true" === Router.buildQuery({"a": 1, "b": 2, "c": true})``` | Returns a query string for any associative object |
 
 ## Controllers
 Controllers link to actions from the routing and act to direct the flow of the application.
