@@ -1,4 +1,4 @@
-Tramway is a simple framework core that can be used with Express to speed up and structure apps build in ES2015+. It includes:
+Tramway is a simple framework core that can be used with Express to speed up and structure apps built in ES2015+. It includes:
 
 1. A dynamic routing system that separates routes from routing logic and is adaptable
 2. Restful routes to save time building APIs
