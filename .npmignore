@@ -5,3 +5,4 @@ test.js
 core/**/*.js.map
 *.js.map
 tests/
+.gitlab-ci.yml
