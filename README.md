@@ -77,6 +77,7 @@ export default class SampleModel extends Model {
     }
 ```
 ### Summary of Model Spec
+
 | Function | Usage |
 | --- | --- |
 | ```constructor(Connection, Entity)``` | Constructor takes a Connection and entity |
@@ -85,6 +86,7 @@ export default class SampleModel extends Model {
 
 ### Exposed methods to use
 All of these methods rely on the Connection's implementation and will just interact with the Connection.
+
 | Function | Usage |
 | --- | --- |
 | ```updateEntity(Object)``` | Updates entity based on object given |
