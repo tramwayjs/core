@@ -12,3 +12,7 @@ Some things to know about this project:
 1. It uses ES2015 and runs on Node v6+ (It may run on older versions but support hasn't been tested)
 2. The npm package itself will contain transpiled ES5 code
 3. Unit testing is encouraged using Mocha
+
+If you're using VSCode, here are some handy plugins:
+1. Add jsdoc comments by stevencl v0.0.8+
+2. Document This by Joel Day v0.3.4+
