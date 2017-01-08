@@ -37,12 +37,12 @@ import {Connection} from 'tramway-core';
 | ```constructor()``` | Handles database configuration |
 | ```getItem(id: any, cb: function(Error, Object))``` | Passes the item gotten from the database configuration to the res in the callback |
 | ```getItems(ids: any[], cb: function(Error, Object[]))``` | Passes an array of items for an array of ids. |
-| ```findItems(conditions: string|object, cb: function(Error, Object[]))``` | Returns an array of items for a query on specific conditions. This may be done by object or query string depending on your implementation |
+| ```findItems(conditions: string/object, cb: function(Error, Object[]))``` | Returns an array of items for a query on specific conditions. This may be done by object or query string depending on your implementation |
 | ```hasItem(id: any, cb: function(Error, boolean))``` | Checks if item exists |
 | ```hasItems(ids : any[], cb: function(Error, boolean))``` | Checks if a set of items exists |
 | ```countItems(conditions: any, cb: function(Error, number))``` | Gets a count of items that meet the conditions. |
-| ```createItem(item: Entity|Object, cb: function(Error, Object))``` | Creates an object in the database from an `Entity` or standard object |
-| ```updateItem(id: any, item: Entity|Object, cb: function(Error, Object))``` | Updates the item found with the given id |
+| ```createItem(item: Entity/Object, cb: function(Error, Object))``` | Creates an object in the database from an `Entity` or standard object |
+| ```updateItem(id: any, item: Entity/Object, cb: function(Error, Object))``` | Updates the item found with the given id |
 | ```deleteItem(id: any, cb: function(Error, Object))``` | Removes an item from the datastore and returns it |
 | ```deleteItems(ids : any[], cb: function(Error, Object[]))``` | Removes items from the datastore and returns them |
 | ```query(query: string|Object, values: Object, cb: function(Error, Object[]))``` | Meant as an override based on your datastore because we can't always rely on simple CRUD |
@@ -89,7 +89,7 @@ All of these methods rely on the Connection's implementation and will just inter
 | ```create(cb: function(Error, Object))``` | Creates an object in the entity's set and returns the persisted object |
 | ```update(cb: function(Error, Object))``` | Updates the object with the set id with the updated entity |
 | ```delete(cb: function(Error, Object))``` | Deletes the item with the Model's set id.|
-| ```find(condtions: string|Object, cb: function(Error, Object[]))``` | Finds an object in the entity's set with given conditions - based on `Condition`'s `findItems` implementation. |
+| ```find(condtions: string/Object, cb: function(Error, Object[]))``` | Finds an object in the entity's set with given conditions - based on `Condition`'s `findItems` implementation. |
 | ```getMany(ids: any[], cb: function(Error, Object[]))``` | Gets objects tied to a list of ids |
 | ```count(conditions, cb: function(Error, number))``` | Gets a count of objects for given conditons |
 
@@ -276,7 +276,7 @@ let {TypeEnforcementService} = services;
 
 | Function | Usage | Notes |
 | --- | --- | --- |
-| ```enforceTypes(value: any, types: Set<string>|string[]|string, errorHandler: function(value): value): value``` | ```TypeEnforcementService.enforceTypes(someValue, ["string", "number"]);``` | `errorHandler` is optional. Will check basic types using typeof and return value if valid or throw `WrongTypeError` |
+| ```enforceTypes(value: any, types: Set<string>/string[]/string, errorHandler: function(value): value): value``` | ```TypeEnforcementService.enforceTypes(someValue, ["string", "number"]);``` | `errorHandler` is optional. Will check basic types using typeof and return value if valid or throw `WrongTypeError` |
 | ```enforceInstance(value: any, expectedClass: Object, errorHandler: function(value): value): value``` | ```TypeEnforcementService.enforceTypes(someValue, SomeClass);``` | `errorHandler` is optional. Will check basic types using instanceof and return value if valid or throw `WrongTypeError` |
 
 # Errors
