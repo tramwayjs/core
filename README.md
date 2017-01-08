@@ -37,7 +37,7 @@ import {Connection} from 'tramway-core';
 | ```constructor()``` | Handles database configuration |
 | ```getItem(id: any, cb: function(Error, Object))``` | Passes the item gotten from the database configuration to the res in the callback |
 | ```getItems(ids: any[], cb: function(Error, Object[]))``` | Passes an array of items for an array of ids. |
-| ```findItems(conditions: string/object, cb: function(Error, Object[]))``` | Returns an array of items for a query on specific conditions. This may be done by object or query string depending on your implementation |
+| ```findItems(conditions: string/Object, cb: function(Error, Object[]))``` | Returns an array of items for a query on specific conditions. This may be done by object or query string depending on your implementation |
 | ```hasItem(id: any, cb: function(Error, boolean))``` | Checks if item exists |
 | ```hasItems(ids : any[], cb: function(Error, boolean))``` | Checks if a set of items exists |
 | ```countItems(conditions: any, cb: function(Error, number))``` | Gets a count of items that meet the conditions. |
@@ -45,7 +45,7 @@ import {Connection} from 'tramway-core';
 | ```updateItem(id: any, item: Entity/Object, cb: function(Error, Object))``` | Updates the item found with the given id |
 | ```deleteItem(id: any, cb: function(Error, Object))``` | Removes an item from the datastore and returns it |
 | ```deleteItems(ids : any[], cb: function(Error, Object[]))``` | Removes items from the datastore and returns them |
-| ```query(query: string|Object, values: Object, cb: function(Error, Object[]))``` | Meant as an override based on your datastore because we can't always rely on simple CRUD |
+| ```query(query: string/Object, values: Object, cb: function(Error, Object[]))``` | Meant as an override based on your datastore because we can't always rely on simple CRUD |
 
 # Models
 Models allow you to link an entity to a connection and abstract many of the common methods by using the Connection's interface. Unless you need to change logic or add extra logic, a `Model`, given an `Entity` and `Connection`, the implementation can be as simple as the following.
