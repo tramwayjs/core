@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "description": "A simple framework extension to an Express application offering a variety of common abstractions",
   "author": "Julian Wolfe",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/tramwayjs/tramway-core.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/tramwayjs/tramway-core/issues?label_name%5B%5D=bug"
+  },
   "main": "index.js",
   "scripts": {
     "prepublish": "npm run compile",

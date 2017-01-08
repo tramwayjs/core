@@ -10,7 +10,12 @@ and so much more.
 # Installation:
 1. `npm install tramway-core`
 
-# Recommended Folder Structure
+# Example project
+https://gitlab.com/tramwayjs/tramway-example
+
+# Documentation
+
+## Recommended Folder Structure
 - config
 - connections
 - controllers
@@ -21,10 +26,10 @@ and so much more.
 - routes
 - services
 
-# Config
+## Config
 Here is where you can put all the parameters for express - like CORS
 
-# Connections
+## Connections
 Connections are your way to access data sets from a data source, be it a database or API
 
 To create a connection, import the class and implement a derived class with the abstracted stubs to get the most out of it.
@@ -47,7 +52,7 @@ import {Connection} from 'tramway-core';
 | ```deleteItems(ids : any[], cb: function(Error, Object[]))``` | Removes items from the datastore and returns them |
 | ```query(query: string/Object, values: Object, cb: function(Error, Object[]))``` | Meant as an override based on your datastore because we can't always rely on simple CRUD |
 
-# Models
+## Models
 Models allow you to link an entity to a connection and abstract many of the common methods by using the Connection's interface. Unless you need to change logic or add extra logic, a `Model`, given an `Entity` and `Connection`, the implementation can be as simple as the following.
 
 ```
@@ -71,21 +76,21 @@ export default class SampleModel extends Model {
         return this;
     }
 ```
-## Summary of Model Spec
+### Summary of Model Spec
 | Function | Usage |
 | --- | --- |
 | ```constructor(Connection, Entity)``` | Constructor takes a Connection and entity |
 | ```getId()``` | Acts as an interfact to get the entity's id and needs to be implemented since it is entity-specific |
 | ```setId(id)``` | Sets the id of internalized connection parameters to be for the given object |
 
-## Exposed methods to use
+### Exposed methods to use
 All of these methods rely on the Connection's implementation and will just interact with the Connection.
 | Function | Usage |
 | --- | --- |
 | ```updateEntity(Object)``` | Updates entity based on object given |
 | ```exists(cb: function(Error, boolean))``` | Calls Connection's exist function |
 | ```get(cb: function(Error, Object))``` | Gets entity with set id |
-| ```getAll(cb: function(Error, Object[])``` | Gets all objects from the entity's set |
+| ```getAll(cb: function(Error, Object[]))``` | Gets all objects from the entity's set |
 | ```create(cb: function(Error, Object))``` | Creates an object in the entity's set and returns the persisted object |
 | ```update(cb: function(Error, Object))``` | Updates the object with the set id with the updated entity |
 | ```delete(cb: function(Error, Object))``` | Deletes the item with the Model's set id.|
@@ -93,7 +98,7 @@ All of these methods rely on the Connection's implementation and will just inter
 | ```getMany(ids: any[], cb: function(Error, Object[]))``` | Gets objects tied to a list of ids |
 | ```count(conditions, cb: function(Error, number))``` | Gets a count of objects for given conditons |
 
-# Entity
+## Entity
 An entity is a simple class that contains the getters and setters for its properties. It also comes with validation and serialization.
 
 | Function | Usage |
@@ -108,7 +113,7 @@ To create an entity, extend the class.
 import {Entity} from 'tramway-core';
 ```
 
-# Routes
+## Routes
 Routes are where you store the routes that the `Router` will take.
 
 A typical routes file in the routes folder would import Controllers and directly assign their actions to a route. The resulting JSON would be consumed and converted by the router into a standard, secure or restful route.
@@ -157,7 +162,7 @@ const routesValues = [
 export default routesValues;
 ```
 
-## Route specs
+### Route specs
 | Attribute | Expected Values | Default Values | Notes |
 | --- | --- | --- | --- |
 | path | Unparameterized path string | "/" | If no path is specified, the router will default to root. |
@@ -167,7 +172,7 @@ export default routesValues;
 | arguments | string[] | "" | An optional ordered array of arguments to add to the path. ["id", "name"] equates to "/:id/:name"
 | policy | `AuthenticationStrategy` | undefined | Ignored if unpresent, applies a policy or authentication strategy before allowing the router to proceed to the controller when a request is made to the  |
 
-# Router
+## Router
 The Router will be called in your main server file where you create your Express server and get the routes file. This is typically at the root of your project. Once you have a router, initializing it will set up the routes and assign them to the app and return the app to be started via listen.
 
 Here's an example usage among parts of an express server file:
@@ -190,7 +195,7 @@ The router also exposes some static methods which can be used across your app wi
 | ```buildPath(...string): string``` | ```"a/b/c" === Router.buildPath("a", "b", "c")``` | Returns a clean path given any number of strings. |
 | ```buildQuery(params: Object): string``` | ```"a=1&b=2&c=true" === Router.buildQuery({"a": 1, "b": 2, "c": true})``` | Returns a query string for any associative object
 
-# Controllers
+## Controllers
 Controllers link to actions from the routing and act to direct the flow of the application.
 
 To create a controller, import the class and implement a derived class with static functions for each route.
@@ -210,14 +215,14 @@ The Controller class also contains some helper functions that can be used by any
 | ```getRouter(): Router``` | Returns the Router class for extendability |
 | ```redirect(res: Object, path: string, status: number)``` | Calls the main redirect function in Express. |
 
-## Restful Controllers
+### Restful Controllers
 If you're just writing a Restful API, it can rapidly become tedious and messy when you end up creating each part of the CRUD structure and register each route. 
 
 Much of the logic behind this process can be abstracted, such that if you already have a `Connection` and a linked `Model`, all you will have to do is make a derived `RestfulController` to put it altogether.
 
 Here's a sample `RestfulRouter` implementation.
 ```
-import controllers from 'tramway-core';
+import {controllers} from 'tramway-core';
 import TestModel from '../models/TestModel';
 let {RestfulController} = controllers;
 
@@ -244,12 +249,12 @@ export default class TestRestController extends RestfulController {
     }
 }
 ```
-# Policies
+## Policies
 Policies let you regulate routing for authentication or permissions-based reasons. This allows you to write authentication code in one place, use it in the router and not have to burden the rest of the codebase with it.
 
 To write an authentication policy, import the class and implement the stubs.
 ```
-import policies from 'tramway-core';
+import {policies} from 'tramway-core';
 let {AuthenticationStrategy} = policies;
 ```
 
@@ -262,15 +267,15 @@ let {AuthenticationStrategy} = policies;
 
 If a policy is indicated with the route, it will call the framework's internal Security service which will return a result based on the check performed by the Authentication service using the Authentication strategy - which uses strategy pattern. It's at this point where the router will redirect with a 401 to the policy's redirect route if the strategy's check criteria fails.
 
-# Services
+## Services
 The services folder is to place any logic that handles specific core tasks. The framework comes with a service itself.
 
-## Type Enforcement Service
+### Type Enforcement Service
 The type enforcement service makes up for the short-comings of typing in JavaScript and lets your app cleanly enforce types if need be. The utility service comes with a few static methods to let you enforce basic types or custom classes and either throw an Error (default) or override the behavior with a less obstructive way to handle it.
 
 To use the `TypeEnforcementService` just import it.
 ```
-import services from 'tramway-core`;
+import {services} from 'tramway-core`;
 let {TypeEnforcementService} = services;
 ```
 
@@ -279,7 +284,7 @@ let {TypeEnforcementService} = services;
 | ```enforceTypes(value: any, types: Set<string>/string[]/string, errorHandler: function(value): value): value``` | ```TypeEnforcementService.enforceTypes(someValue, ["string", "number"]);``` | `errorHandler` is optional. Will check basic types using typeof and return value if valid or throw `WrongTypeError` |
 | ```enforceInstance(value: any, expectedClass: Object, errorHandler: function(value): value): value``` | ```TypeEnforcementService.enforceTypes(someValue, SomeClass);``` | `errorHandler` is optional. Will check basic types using instanceof and return value if valid or throw `WrongTypeError` |
 
-# Errors
+## Errors
 All errors extend Javascript's `Error` class and naming repeated ones comes in handy when reading code and writing it quickly. The framework comes with errors which can be accessed and used.
 
 ```
