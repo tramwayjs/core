@@ -1,6 +1,6 @@
 {
   "name": "tramway-core",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A simple framework extension to an Express application offering a variety of common abstractions",
   "author": "Julian Wolfe",
   "license": "MIT",
