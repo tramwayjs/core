@@ -22,6 +22,52 @@ https://gitlab.com/tramwayjs/tramway-example
 - errors
 - services
 
+## App
+
+The App class encompasses your express app into a clean shell that can be built with the `tramway-core-dependency-injector` library.
+
+To use `App` in your server.js the declarative way:
+
+```
+import {App} from 'tramway-core';
+...
+
+let app = new App(router, express, port);
+app.use(cors());
+
+app.initialize().start();
+```
+
+To use `App` with dependency injection in the services declaration:
+
+```
+import {App} from 'tramway-core';
+
+export default {
+    "app": {
+        "class": App,
+        "constructor": [
+            {"type": "service", "key": "router"},
+            {"type": "parameter", "key": "app"},
+            {"type": "parameter", "key": "PORT"},
+        ],
+        "functions": [
+            {
+                "function": "use",
+                "args": [{"type": "parameter", "key": "cors"}],
+            },
+        ],
+    }
+}
+```
+
+In your server.js:
+
+```
+let app = DependencyResolver.getService('app');
+app.initialize().start();
+```
+
 ## Config
 Here is where you can put all the parameters for express - like CORS
 

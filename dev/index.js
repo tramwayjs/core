@@ -1,4 +1,6 @@
+import App from './core/App';
+
 import * as errors from './core/errors';
 import * as services from './core/services';
 
-export {errors, services};
+export {App, errors, services};
