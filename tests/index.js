@@ -5,6 +5,29 @@ var describeCoreClass = utils.describeCoreClass;
 var describeFunction = utils.describeFunction;
 
 describe("Simple acceptance tests to ensure library returns what's promised.", function(){
+    describe("Should return a proper 'App' class", describeCoreClass(
+        lib.App, 
+        "App", 
+        [],
+        ["use", "initialize", "start"],
+        function(testClass, testInstance, classFunctions, instanceFunctions) {
+            describe("The 'use' function should have the same signature", describeFunction(
+                testInstance["use"], 
+                ["middleware"]
+            ));
+
+            describe("The 'initialize' function should have the same signature", describeFunction(
+                testInstance["initialize"], 
+                []
+            ));
+
+            describe("The 'start' function should have the same signature", describeFunction(
+                testInstance["start"], 
+                []
+            ));
+        }   
+    ));
+
     describe("Should return an object for errors.", function(){
         it("Should return an object for errors.", function(){
             assert.strictEqual(typeof lib.errors, "object");
