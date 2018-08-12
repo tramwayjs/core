@@ -9,6 +9,7 @@ export default class App {
         this.router = router;
         this.app = app;
         this.port = port;
+        this.loggers = [];
     }
 
     /**
@@ -24,6 +25,16 @@ export default class App {
      */
     initialize() {
         this.router.initialize();
+        this.loggers.forEach(logger => this.use(logger.getMiddleware()));
+        return this;
+    }
+
+    /**
+     * 
+     * @param {*} logger 
+     */
+    addLogger(logger) {
+        this.loggers.push(logger);
         return this;
     }
     
