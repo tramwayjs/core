@@ -9,7 +9,7 @@ describe("Simple acceptance tests to ensure library returns what's promised.", f
         lib.App, 
         "App", 
         [],
-        ["use", "initialize", "start"],
+        ["use", "initialize", "start", "addLogger"],
         function(testClass, testInstance, classFunctions, instanceFunctions) {
             describe("The 'use' function should have the same signature", describeFunction(
                 testInstance["use"], 
@@ -24,6 +24,11 @@ describe("Simple acceptance tests to ensure library returns what's promised.", f
             describe("The 'start' function should have the same signature", describeFunction(
                 testInstance["start"], 
                 []
+            ));
+
+            describe("The 'addLogger' function should have the same signature", describeFunction(
+                testInstance["addLogger"], 
+                ['logger']
             ));
         }   
     ));
