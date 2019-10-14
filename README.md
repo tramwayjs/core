@@ -28,7 +28,7 @@ The App class encompasses your express app into a clean shell that can be built 
 
 To use `App` in your server.js the declarative way:
 
-```
+```javascript
 import {App} from 'tramway-core';
 ...
 
@@ -40,7 +40,7 @@ app.initialize().start();
 
 To use `App` with dependency injection in the services declaration:
 
-```
+```javascript
 import {App} from 'tramway-core';
 
 export default {
@@ -63,9 +63,136 @@ export default {
 
 In your server.js:
 
-```
+```javascript
 let app = DependencyResolver.getService('app');
 app.initialize().start();
+```
+
+### HTTPS Support
+An additional final parameter can be added to the `App` constructor which passes extra data that can be used to start an https server.
+
+The object takes this form:
+
+```javascript
+const httpsConfig = {
+    port: 8443,
+    privateKey: {
+        file: 'sslcert/server.key',
+        encoding: 'utf8'
+    },
+    certificate: {
+        file: 'sslcert/server.key',
+        encoding: 'utf8'
+    },
+}
+```
+
+The object can be passed as a param directly to App or saved in the parameters and passed via the dependency injection configuration.
+
+Example:
+
+In `config/parameters/global/index.js`
+
+Add a reference to the above config saved in `httpsConfig.js`
+
+```javascript
+...
+import httpsConfig from './httpsConfig';
+
+export default {
+    ...
+    httpsConfig,
+}
+```
+
+In `config/services/core.js`:
+
+```javascript
+import {App} from 'tramway-core';
+
+export default {
+    "app": {
+        "class": App,
+        "constructor": [
+            {"type": "service", "key": "router"},
+            {"type": "parameter", "key": "app"},
+            {"type": "parameter", "key": "PORT"},
+            {"type": "parameter", "key": "httpsConfig"},
+        ],
+        "functions": [
+            {
+                "function": "use",
+                "args": [{"type": "parameter", "key": "cors"}],
+            },
+        ],
+    }
+}
+```
+
+### app.set
+
+The `App` provides an injectable wrapper over the Express app's `set` method which can be used to managed trusted proxies.
+
+It takes an object with a key and value, where the value is expected to be an array that can be spread as many arguments in the express `set` method. 
+
+Declarative:
+
+```javascript
+let app = new App(router, express, port);
+app.set({key: 'trust proxy', value: [true]});
+```
+
+To use with dependency injection in the services declaration:
+
+Create `src/config/parameters/global/trustedProxy.js`
+
+```javascript
+export default {
+    key: 'trust proxy',
+    value: [true],
+}
+```
+
+In `src/config/parameters/global/index.js`
+
+Add a reference to the above config saved in `trustedProxy.js`
+
+```javascript
+...
+import trustedProxy from './trustedProxy';
+
+export default {
+    ...
+    trustedProxy,
+}
+```
+
+In `config/services/core.js`:
+
+```javascript
+import {App} from 'tramway-core';
+
+export default {
+    "app": {
+        "class": App,
+        "constructor": [
+            {"type": "service", "key": "router"},
+            {"type": "parameter", "key": "app"},
+            {"type": "parameter", "key": "PORT"},
+            {"type": "parameter", "key": "httpsConfig"},
+        ],
+        "functions": [
+            {
+                "function": "use",
+                "args": [{"type": "parameter", "key": "cors"}],
+            },
+            {
+                "function": "set",
+                "args": [{"type": "parameter", "key": "trustedProxy"}],
+            },
+        ],
+    }
+}
 ```
 
 ## Config
@@ -78,7 +205,7 @@ The services folder is to place any logic that handles specific core tasks. The 
 The type enforcement service makes up for the short-comings of typing in JavaScript and lets your app cleanly enforce types if need be. The utility service comes with a few static methods to let you enforce basic types or custom classes and either throw an Error (default) or override the behavior with a less obstructive way to handle it.
 
 To use the `TypeEnforcementService` just import it.
-```
+```javascript
 import {services} from 'tramway-core`;
 let {TypeEnforcementService} = services;
 ```
@@ -91,7 +218,7 @@ let {TypeEnforcementService} = services;
 ## Errors
 All errors extend Javascript's `Error` class and naming repeated ones comes in handy when reading code and writing it quickly. The framework comes with errors which can be accessed and used.
 
-```
+```javascript
 import {errors} from 'tramway-core';
 let {WrongTypeError, AbstractMethodError} = errors;
 ```

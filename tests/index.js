@@ -1,6 +1,6 @@
 const assert = require('assert');
 const utils = require('tramway-core-testsuite');
-const lib = require('../index.js');
+const lib = require('../dist/index.js');
 var describeCoreClass = utils.describeCoreClass;
 var describeFunction = utils.describeFunction;
 
@@ -9,7 +9,7 @@ describe("Simple acceptance tests to ensure library returns what's promised.", f
         lib.App, 
         "App", 
         [],
-        ["use", "initialize", "start", "addLogger"],
+        ["use", "initialize", "start", "addLogger", "set"],
         function(testClass, testInstance, classFunctions, instanceFunctions) {
             describe("The 'use' function should have the same signature", describeFunction(
                 testInstance["use"], 
