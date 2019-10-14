@@ -30,8 +30,8 @@ export default class App {
      * 
      * @param {*} Object Setting configuration you can pass to the express app. 
      */
-    set({key, value = []} = {}) {
-        this.app.set(key, ...value);
+    set({key, value} = {}) {
+        this.app.set(key, value);
     }
 
     /**
