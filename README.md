@@ -81,7 +81,7 @@ const httpsConfig = {
         encoding: 'utf8'
     },
     certificate: {
-        file: 'sslcert/server.key',
+        file: 'sslcert/server.cert',
         encoding: 'utf8'
     },
 }
@@ -139,7 +139,7 @@ Declarative:
 
 ```javascript
 let app = new App(router, express, port);
-app.set({key: 'trust proxy', value: [true]});
+app.set({key: 'trust proxy', value: true});
 ```
 
 To use with dependency injection in the services declaration:
@@ -149,7 +149,7 @@ Create `src/config/parameters/global/trustedProxy.js`
 ```javascript
 export default {
     key: 'trust proxy',
-    value: [true],
+    value: true,
 }
 ```
 
