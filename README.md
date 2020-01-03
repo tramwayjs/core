@@ -10,7 +10,7 @@ and so much more.
 This library provides the common core and it is encouraged to install the compatible pieces you need for your project.
 
 # Installation:
-1. `npm install tramway-core`
+1. `npm install @tramway/core`
 
 # Example project
 https://gitlab.com/tramwayjs/tramway-example
@@ -24,28 +24,32 @@ https://gitlab.com/tramwayjs/tramway-example
 
 ## App
 
-The App class encompasses your express app into a clean shell that can be built with the `tramway-core-dependency-injector` library.
+The `App` class encapsulates all the internal configuration and Dependency Injection setup, as well as the new event-driven `Kernel` communications that can be used to extend Tramway's with dashboards and debugging tools.
 
-To use `App` in your server.js the declarative way:
+## Server
+
+The Server class encompasses your routed Controllers into a clean shell that can be built with the `@tramway/dependency-injector` library.
+
+To use `Server` in your server.js the declarative way:
 
 ```javascript
-import {App} from 'tramway-core';
+import {Server} from '@tramway/core';
 ...
 
-let app = new App(router, express, port);
-app.use(cors());
+let server = new Server(router, express, port);
+server.use(cors());
 
-app.initialize().start();
+server.initialize().start();
 ```
 
-To use `App` with dependency injection in the services declaration:
+To use `Server` with dependency injection in the services declaration:
 
 ```javascript
-import {App} from 'tramway-core';
+import {Server} from '@tramway/core';
 
 export default {
-    "app": {
-        "class": App,
+    "server": {
+        "class": Server,
         "constructor": [
             {"type": "service", "key": "router"},
             {"type": "parameter", "key": "app"},
@@ -64,82 +68,21 @@ export default {
 In your server.js:
 
 ```javascript
-let app = DependencyResolver.getService('app');
-app.initialize().start();
-```
-
-### HTTPS Support
-An additional final parameter can be added to the `App` constructor which passes extra data that can be used to start an https server.
-
-The object takes this form:
-
-```javascript
-const httpsConfig = {
-    port: 8443,
-    privateKey: {
-        file: 'sslcert/server.key',
-        encoding: 'utf8'
-    },
-    certificate: {
-        file: 'sslcert/server.cert',
-        encoding: 'utf8'
-    },
-}
-```
-
-The object can be passed as a param directly to App or saved in the parameters and passed via the dependency injection configuration.
-
-Example:
-
-In `config/parameters/global/index.js`
-
-Add a reference to the above config saved in `httpsConfig.js`
-
-```javascript
-...
-import httpsConfig from './httpsConfig';
-
-export default {
-    ...
-    httpsConfig,
-}
-```
-
-In `config/services/core.js`:
-
-```javascript
-import {App} from 'tramway-core';
-
-export default {
-    "app": {
-        "class": App,
-        "constructor": [
-            {"type": "service", "key": "router"},
-            {"type": "parameter", "key": "app"},
-            {"type": "parameter", "key": "PORT"},
-            {"type": "parameter", "key": "httpsConfig"},
-        ],
-        "functions": [
-            {
-                "function": "use",
-                "args": [{"type": "parameter", "key": "cors"}],
-            },
-        ],
-    }
-}
+let server = DependencyResolver.getService('server');
+server.initialize().start();
 ```
 
 ### app.set
 
-The `App` provides an injectable wrapper over the Express app's `set` method which can be used to managed trusted proxies.
+The `Server` provides an injectable wrapper over the Express app's `set` method which can be used to managed trusted proxies.
 
 It takes an object with a key and value, where the value is expected to be an array that can be spread as many arguments in the express `set` method. 
 
 Declarative:
 
 ```javascript
-let app = new App(router, express, port);
-app.set({key: 'trust proxy', value: true});
+let server = new Server(router, express, port);
+server.set({key: 'trust proxy', value: true});
 ```
 
 To use with dependency injection in the services declaration:
@@ -170,11 +113,11 @@ export default {
 In `config/services/core.js`:
 
 ```javascript
-import {App} from 'tramway-core';
+import {Server} from '@tramway/core';
 
 export default {
-    "app": {
-        "class": App,
+    "server": {
+        "class": Server,
         "constructor": [
             {"type": "service", "key": "router"},
             {"type": "parameter", "key": "app"},
@@ -206,7 +149,7 @@ The type enforcement service makes up for the short-comings of typing in JavaScr
 
 To use the `TypeEnforcementService` just import it.
 ```javascript
-import {services} from 'tramway-core`;
+import {services} from '@tramway/core`;
 let {TypeEnforcementService} = services;
 ```
 
@@ -219,7 +162,7 @@ let {TypeEnforcementService} = services;
 All errors extend Javascript's `Error` class and naming repeated ones comes in handy when reading code and writing it quickly. The framework comes with errors which can be accessed and used.
 
 ```javascript
-import {errors} from 'tramway-core';
+import {errors} from '@tramway/core';
 let {WrongTypeError, AbstractMethodError} = errors;
 ```
 
