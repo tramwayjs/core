@@ -1,4 +1,4 @@
-import {createDependencyResolver} from '@tramway/dependency-injector';
+import {createDependencyResolver} from 'tramway-core-dependency-injector';
 import { MessageFactory, Command, Data } from './messages';
 
 export default class App {
@@ -79,6 +79,23 @@ export default class App {
             return {};
         }
 
-        return parametersManager.getParameters();
+        let parameters = parametersManager.getParameters();
+
+        parameters = JSON.stringify(parameters, (key, value) => {
+            for (let [k, v] of Object.entries(value)) {
+                if (v instanceof Function) {
+                    let val = v.toString();
+                    value[k] = val.substring(val.indexOf('function') + 'function'.length, val.indexOf('{')).trim();
+                }
+
+                if (['router', 'routes'].includes(k)) {
+                    delete value[k];
+                }
+            }
+
+            return value;
+        })
+
+        return JSON.parse(parameters);
     }
 }
