@@ -10,7 +10,7 @@ and so much more.
 This library provides the common core and it is encouraged to install the compatible pieces you need for your project.
 
 # Installation:
-1. `npm install @tramway/core`
+1. `npm install @tramwayjs/core`
 
 # Example project
 https://gitlab.com/tramwayjs/tramway-example
@@ -28,12 +28,12 @@ The `App` class encapsulates all the internal configuration and Dependency Injec
 
 ## Server
 
-The Server class encompasses your routed Controllers into a clean shell that can be built with the `@tramway/dependency-injector` library.
+The Server class encompasses your routed Controllers into a clean shell that can be built with the `@tramwayjs/dependency-injector` library.
 
 To use `Server` in your server.js the declarative way:
 
 ```javascript
-import {Server} from '@tramway/core';
+import {Server} from '@tramwayjs/core';
 ...
 
 let server = new Server(router, express, port);
@@ -45,7 +45,7 @@ server.initialize().start();
 To use `Server` with dependency injection in the services declaration:
 
 ```javascript
-import {Server} from '@tramway/core';
+import {Server} from '@tramwayjs/core';
 
 export default {
     "server": {
@@ -113,7 +113,7 @@ export default {
 In `config/services/core.js`:
 
 ```javascript
-import {Server} from '@tramway/core';
+import {Server} from '@tramwayjs/core';
 
 export default {
     "server": {
@@ -149,7 +149,7 @@ The type enforcement service makes up for the short-comings of typing in JavaScr
 
 To use the `TypeEnforcementService` just import it.
 ```javascript
-import {services} from '@tramway/core`;
+import {services} from '@tramwayjs/core`;
 let {TypeEnforcementService} = services;
 ```
 
@@ -162,7 +162,7 @@ let {TypeEnforcementService} = services;
 All errors extend Javascript's `Error` class and naming repeated ones comes in handy when reading code and writing it quickly. The framework comes with errors which can be accessed and used.
 
 ```javascript
-import {errors} from '@tramway/core';
+import {errors} from '@tramwayjs/core';
 let {WrongTypeError, AbstractMethodError} = errors;
 ```
 
