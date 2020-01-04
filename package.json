@@ -22,7 +22,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-transform-flow-strip-types": "^7.6.3",
     "@babel/preset-env": "^7.6.3",
-    "mocha": "^3.2.0",
+    "mocha": "^6.2.2",
     "tramway": "^0.5.1",
     "tramway-core-testsuite": "^1.2.0"
   }
