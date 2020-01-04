@@ -1,4 +1,4 @@
-import {createDependencyResolver} from 'tramway-core-dependency-injector';
+import {createDependencyResolver} from '@tramwayjs/dependency-injector';
 import { MessageFactory, Command, Data } from './messages';
 
 export default class App {
