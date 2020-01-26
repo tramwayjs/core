@@ -42,6 +42,10 @@ export default class Kernel {
         });
     }
 
+    getProcessId() {
+        return this.appProcess.pid;
+    }
+
     async getApplicationState() {
         return new Promise((resolve, reject) => {
             this.appProcess.send(new Command('state'), err => {

@@ -65,6 +65,8 @@ export default class Manager extends AbstractManager {
             throw e;
         }
 
-        this.eventEmitter.emit(AbstractManager.EVENT_STATE_RETRIEVED, state);
+        const processId = this.kernel.getProcessId();
+
+        this.eventEmitter.emit(AbstractManager.EVENT_STATE_RETRIEVED, { processId, ...state });
     }
 }
