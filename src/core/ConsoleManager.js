@@ -9,16 +9,11 @@ export default class ConsoleManager extends AbstractManager {
         process.stdin.on('data', async data => this.run(data.toString().trim()));
 
         this.eventEmitter.on(AbstractManager.EVENT_SERVER_STOPPED, () => this.handleServerStopped());
-        this.eventEmitter.on(AbstractManager.EVENT_STATE_RETRIEVED, state => this.handleApplicationStateRetrieved(state));
         return this;
     }
 
     handleServerStopped() {
-        process.exit();
-    }
-
-    handleApplicationStateRetrieved(state) {
-        console.log(state)
+        console.log('A server has exited');
     }
 
     start() {
