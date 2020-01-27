@@ -1,88 +1,101 @@
-import http from 'http';
-import https from 'https';
-import fs from 'fs';
+import {createDependencyResolver} from '@tramwayjs/dependency-injector';
+import { MessageFactory, Command, Data } from './messages';
 
 export default class App {
-    /**
-     * 
-     * @param {Router} router `tramway-core-router`
-     * @param {*} app Express app
-     * @param {number} port Port from config
-     * @param {Object} httpsConfig Necessary configuration for https
-     */
-    constructor(router, app, port, httpsConfig) {
-        this.router = router;
-        this.app = app;
-        this.port = port;
-        this.httpsConfig = httpsConfig;
-        this.loggers = [];
+    constructor(name, services, parameters) {
+        this.name = name;
+        this.config = {services, parameters}; 
+        this.di = createDependencyResolver(this.name);
+        this.messageFactory = new MessageFactory();
     }
 
-    /**
-     * 
-     * @param {*} middleware Middleware you usually use in the express app
-     */
-    use(middleware) {
-        this.app.use(middleware);
+    static init(name, services, parameters) {
+        const app = new App(name, services, parameters).initialize();
+
+        process.on('message', async message => await app.handleMessage(message));
+
+        return app;
     }
 
-    /**
-     * 
-     * @param {*} Object Setting configuration you can pass to the express app. 
-     */
-    set({key, value} = {}) {
-        this.app.set(key, value);
-    }
+    async handleMessage(message) {
+        message = this.messageFactory.init(message);
 
-    /**
-     * Initialize the router
-     */
-    initialize() {
-        this.router.initialize();
-        this.loggers.forEach(logger => this.use(logger.getMiddleware()));
-        return this;
-    }
-
-    /**
-     * 
-     * @param {*} logger 
-     */
-    addLogger(logger) {
-        this.loggers.push(logger);
-        return this;
-    }
-    
-    /**
-     * Start the app
-     */
-    start() {
-        //TODO: Introduce the concept of Servers at the App constructor level to encapsulate this logic.
-        if (this.httpsConfig) {
-            const {
-                port,
-                privateKey,
-                certificate,
-            } = this.httpsConfig;
-
-            const getContentsFromCertConfig = config => {
-                const {file, encoding = 'utf8'} = config;
-                return fs.readFileSync(file, encoding)
-            }
-
-            const credentials = {
-                key: getContentsFromCertConfig(privateKey),
-                cert: getContentsFromCertConfig(certificate),
-            }
-
-            const httpServer = http.createServer(this.app);
-            const httpsServer = https.createServer(credentials, this.app);
-
-            httpServer.listen(this.port);
-            httpsServer.listen(port);
-
-            return this.app;
+        if (message instanceof Command) {
+            await this.execute(message.getValue());
         }
 
-        return this.app.listen(this.port);
+        if (message instanceof Data) {
+
+        }
+    }
+
+    async execute(command) {
+        switch(command) {
+            case 'start': return await this.start();
+            case 'stop': return await this.stop();
+            case 'restart': return await this.restart();
+            case 'state': return await this.getApplicationState();
+        }
+    }
+
+    initialize() {
+        const {services, parameters} = this.config;
+        this.di.initialize(services, parameters);
+        this.server = this.di.getService('server').initialize();
+        return this;
+    }
+
+    async start() {
+        return await this.server.start();
+    }
+
+    async stop() {
+        return await this.server.stop();
+    }
+
+    async restart() {
+        return await this.server.restart();
+    }
+
+    async getApplicationState() {
+        const parameters = this.getParameters();
+        const instances = this.getInstances();
+        return process.send({parameters, instances});
+    }
+
+    getInstances() {
+        const servicesManger = this.di.getDependencyManager().getServicesManager();
+        if (!servicesManger || !servicesManger.getInstanceKeys()) {
+            return [];
+        }
+
+        return servicesManger.getInstanceKeys();
+    }
+
+    getParameters() {
+        const parametersManager = this.di.getDependencyManager().getParametersManager();
+
+        if (!parametersManager || !parametersManager.getParameters()) {
+            return {};
+        }
+
+        let parameters = parametersManager.getParameters();
+
+        parameters = JSON.stringify(parameters, (key, value) => {
+            for (let [k, v] of Object.entries(value)) {
+                if (v instanceof Function) {
+                    let val = v.toString();
+                    value[k] = val.substring(val.indexOf('function') + 'function'.length, val.indexOf('{')).trim();
+                }
+
+                if (['router', 'routes'].includes(k)) {
+                    delete value[k];
+                }
+            }
+
+            return value;
+        })
+
+        return JSON.parse(parameters);
     }
 }

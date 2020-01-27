@@ -1,21 +1,24 @@
 {
-  "name": "tramway-core",
-  "version": "2.2.2",
+  "name": "@tramwayjs/core",
+  "version": "3.0.0-beta.4",
   "description": "A simple framework extension to an Express application offering a variety of common abstractions",
   "author": "Julian Wolfe",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/tramwayjs/tramway-core.git"
+    "url": "https://github.com/tramwayjs/core.git"
   },
   "bugs": {
-    "url": "https://gitlab.com/tramwayjs/tramway-core/issues?label_name%5B%5D=bug"
+    "url": "https://github.com/tramwayjs/core/labels/bug"
   },
   "main": "dist/index.js",
   "scripts": {
     "prepublish": "npm run build",
     "build": "tramway build",
     "test": "tramway build && mocha tests"
+  },
+  "peerDependencies": {
+    "@tramwayjs/dependency-injector": "^2.0.0-beta.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.5.5",
