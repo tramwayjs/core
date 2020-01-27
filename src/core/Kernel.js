@@ -7,6 +7,10 @@ export default class Kernel {
     }
 
     async start() {
+        if (!this.appProcess || this.appProcess.killed) {
+            this.appProcess = ChildProcess.fork(require.resolve('./init'));
+        }
+
         return new Promise((resolve, reject) => {
             this.appProcess.send(new Command('start'), err => {
                 if(err) {
@@ -24,6 +28,8 @@ export default class Kernel {
                 if(err) {
                     return reject(err);
                 }
+
+                this.appProcess.kill();
 
                 return resolve(this);
             });

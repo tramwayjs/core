@@ -16,7 +16,6 @@ export default class Manager extends AbstractManager {
         this.eventEmitter.on(AbstractManager.EVENT_SERVER_STOP, () => this.stop());
         this.eventEmitter.on(AbstractManager.EVENT_SERVER_RESTART, () => this.restart());
         this.eventEmitter.on(AbstractManager.EVENT_STATE_REQUESTED, () => this.requestApplicationState());
-        this.eventEmitter.on(AbstractManager.EVENT_SERVER_STOPPED, () => process.exit());
         return this;
     }
 
@@ -62,7 +61,7 @@ export default class Manager extends AbstractManager {
         try {
             state = await this.kernel.getApplicationState();
         } catch(e) {
-            throw e;
+            return;
         }
 
         const processId = this.kernel.getProcessId();
